@@ -81,6 +81,20 @@ async function run() {
       res.send(result);
     });
 
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productsDB.deleteOne(query);
+      res.send(result);
+    });
+    
+    app.get("/myProducts/:email", async(req, res) =>{
+      const userEmail = req.params.email;
+      const result = await productsDB.find({ email: userEmail }).toArray();
+        res.send(result);
+    });
+
+
 
 
 
