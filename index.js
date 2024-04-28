@@ -64,11 +64,12 @@ async function run() {
         $set: {
           name: updateProduct.name,
           brand: updateProduct.brand,
-          type: updateProduct.type,
+          time: updateProduct.time,
           price: updateProduct.price,
           rating: updateProduct.rating,
           description: updateProduct.description,
           photoUrl: updateProduct.photoUrl,
+          stock: updateProduct.stock
         },
       };
 
@@ -80,7 +81,8 @@ async function run() {
       res.send(result);
     });
 
-  
+
+
 
 
 
