@@ -63,13 +63,14 @@ async function run() {
       const newProductData = {
         $set: {
           name: updateProduct.name,
-          brand: updateProduct.brand,
+          category: updateProduct.category,
           time: updateProduct.time,
           price: updateProduct.price,
           rating: updateProduct.rating,
           description: updateProduct.description,
           photoUrl: updateProduct.photoUrl,
-          stock: updateProduct.stock
+          stock: updateProduct.stock,
+          customization: updateProduct.customization
         },
       };
 
@@ -81,7 +82,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/product/:id", async (req, res) => {
+    app.delete("/myProducts/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productsDB.deleteOne(query);
@@ -94,8 +95,50 @@ async function run() {
         res.send(result);
     });
 
+    app.get("/brands/:category", async (req, res) => {
+      const category = req.params.category;
+      const query = { category: category };
+      const cursor = productsDB.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    
 
 
+    app.get("/brands", async (req, res) => {
+      const cursor = brandsDB.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/brands/:name", async (req, res) => {
+      const brandName = req.params.name;
+      const query = { brand: brandName }; // Assuming 'brand' is a field in your products collection
+      const cursor = productsDB.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    
+
+    app.get("/cart", async (req, res) => {
+      const cursor = cartDB.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/cart", async (req, res) => {
+      const products = req.body;
+      const result = await cartDB.insertOne(products);
+      res.send(result);
+    });
+
+    app.delete("/cart/:id", async (req, res) => {
+      const id = req.params.id;
+      // const query = { _id: new ObjectId(id) };
+      const query = { _id: id };
+      const result = await cartDB.deleteOne(query);
+      res.send(result);
+    });
 
 
 
