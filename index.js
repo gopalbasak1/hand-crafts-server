@@ -26,10 +26,10 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    //await client.connect();
 
     const productsDB = client.db("handleCraft").collection("products");
-    const brandsDB = client.db("handleCraft").collection("brands");
+    const categoryDB = client.db("handleCraft").collection("categories");
     const cartDB = client.db("handleCraft").collection("cart");
 
     app.get("/", async (req, res) => {
@@ -95,7 +95,7 @@ async function run() {
         res.send(result);
     });
 
-    app.get("/brands/:category", async (req, res) => {
+    app.get("/categories/:category", async (req, res) => {
       const category = req.params.category;
       const query = { category: category };
       const cursor = productsDB.find(query);
@@ -105,15 +105,15 @@ async function run() {
     
 
 
-    app.get("/brands", async (req, res) => {
-      const cursor = brandsDB.find();
+    app.get("/categories", async (req, res) => {
+      const cursor = categoryDB.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    app.get("/brands/:name", async (req, res) => {
-      const brandName = req.params.name;
-      const query = { brand: brandName }; // Assuming 'brand' is a field in your products collection
+    app.get("/categories/:name", async (req, res) => {
+      const categoryName = req.params.name;
+      const query = { brand: categoryName }; // Assuming 'brand' is a field in your products collection
       const cursor = productsDB.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -143,7 +143,6 @@ async function run() {
 
 
 
-
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -153,7 +152,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
 
 
 app.get('/', (req, res) => {
